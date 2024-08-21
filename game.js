@@ -1,11 +1,23 @@
 // alert("Hello world");
 
-// const game = (function(){
+const game = (function(){
     let playerOne; //establishing player objects
     let playerTwo; //establishing player objects
-// })
+    let currentPlayer;
 
-GameBoard = (function() {
+    function checkSquare(e) { //continue writing
+        const index = e.target.dataset.index; //assigns target cell and accesses its dataset attribute 'number' and returns it
+        if (GameBoard.gameboard[index] === ""){ //if current cell is blank
+            GameBoard.gameboard[index] == currentPlayer.symbol; //replace 'number' with player.symbol
+        }
+        Display.displayBoard(); //renders updated gameboard with player symbol 
+
+    }
+    return{checkSquare};
+
+})();
+
+const GameBoard = (function() { //creates an empty gameboard
     const gameboard = ["","","","","","", "", "", ""]
     return {gameboard}
 })();
@@ -36,20 +48,31 @@ function createPlayer(name,symbol){ //factory function used to create new player
             playerOne = createPlayer(p1Name,'X');
             playerTwo = createPlayer(p2Name,'O');
             console.log(playerOne,playerTwo);
+            currentPlayer = playerOne;
+            Display.addEventListeners();
         };
         startGame(playerOneName, playerTwoName);
 
-    })
+    });
     const message = document.querySelector('#message-game');
 
     
+    const Display = (function() {
+        const boardSquares = document.querySelectorAll('.squares > div');
+
+        function displayBoard() {
+            boardSquares.forEach(square => square.textContent = GameBoard.gameboard[square.dataset.index]);
+        }
+
+        function addEventListeners() {
+            boardSquares.forEach(square => square.addEventListener('click', game.checkSquare ));
+        }
+
+        return {displayBoard, addEventListeners }
+
+    })(); 
 
 
-    // function getNames() {
-    //     nameInputs.forEach(input => playerNames.push(input.value))
-    // };
-    // return{playerOneName, playerTwoName}
-// })();
 
 
 
